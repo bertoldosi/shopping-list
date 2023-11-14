@@ -22,13 +22,17 @@ export default function HomePage() {
   }
 
   function add() {
-    setRows((prevRows) => [
-      ...prevRows,
-      {
-        id: uuidv4(),
-        name: searchValue,
-      },
-    ]);
+    if (searchValue) {
+      setRows((prevRows) => [
+        ...prevRows,
+        {
+          id: uuidv4(),
+          name: searchValue,
+        },
+      ]);
+    } else {
+      alert("Digite o nome do produto!");
+    }
 
     setSeachValue("");
   }
@@ -49,7 +53,6 @@ export default function HomePage() {
       }}
     >
       <Paper
-        component="form"
         sx={{
           display: "flex",
           justifySelf: "center",
