@@ -21,7 +21,9 @@ export default function HomePage() {
     setSeachValue(value);
   }
 
-  function add() {
+  function add(event: React.MouseEvent<HTMLElement>) {
+    event.preventDefault();
+
     if (searchValue) {
       setRows((prevRows) => [
         ...prevRows,
@@ -53,6 +55,7 @@ export default function HomePage() {
       }}
     >
       <Paper
+        component="form"
         sx={{
           display: "flex",
           justifySelf: "center",
@@ -72,7 +75,14 @@ export default function HomePage() {
         />
         <Divider orientation="vertical" />
         <Stack direction="row" spacing={2}>
-          <Button size="small" onClick={add} color="success">
+          <Button
+            size="small"
+            onClick={(event) => {
+              add(event);
+            }}
+            color="success"
+            type="submit"
+          >
             Salvar
           </Button>
         </Stack>
