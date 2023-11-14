@@ -6,8 +6,10 @@ import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
 import { Box, Button, Stack } from "@mui/material";
 import Table from "./table";
+import { v4 as uuidv4 } from "uuid";
 
 interface RowType {
+  id: string;
   name: string;
 }
 
@@ -19,13 +21,21 @@ export default function HomePage() {
     setSeachValue(value);
   }
 
-  function Add() {
+  function add() {
     setRows((prevRows) => [
       ...prevRows,
       {
+        id: uuidv4(),
         name: searchValue,
       },
     ]);
+
+    setSeachValue("");
+  }
+
+  function remove(id: string) {
+    const filterItens = rows.filter((product) => product.id !== id);
+    setRows(filterItens);
   }
 
   return (
@@ -52,18 +62,19 @@ export default function HomePage() {
           sx={{ ml: 1, flex: 1 }}
           placeholder="Nome do produto"
           inputProps={{ "aria-label": "search product name" }}
+          value={searchValue}
           onChange={(event) => {
             onChangeSeach(event.target.value);
           }}
         />
         <Divider orientation="vertical" />
         <Stack direction="row" spacing={2}>
-          <Button size="small" onClick={Add} color="success">
+          <Button size="small" onClick={add} color="success">
             Salvar
           </Button>
         </Stack>
       </Paper>
-      <Table rows={rows} />
+      <Table rows={rows} remove={remove} />
     </Box>
   );
 }

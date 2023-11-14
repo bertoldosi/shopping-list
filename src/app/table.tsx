@@ -12,24 +12,26 @@ import Paper from "@mui/material/Paper";
 import { Button, ButtonGroup, Checkbox, Divider, styled } from "@mui/material";
 
 interface RowType {
+  id: string;
   name: string;
 }
 
 interface PropsType {
   rows: RowType[];
+  remove: (id: string) => void;
 }
 
 const StyledTableCell = styled(TableCell)(() => ({
   padding: "0 .2em",
 }));
 
-export default function Table({ rows }: PropsType) {
+export default function Table({ rows, remove }: PropsType) {
   return (
     <TableContainer component={Paper}>
       <TableMUI aria-label="table">
         <TableBody>
           {rows.map((row) => (
-            <TableRow key={row.name}>
+            <TableRow key={row.id}>
               <StyledTableCell padding="checkbox" component="th" scope="row">
                 <Checkbox
                   id="checkbox"
@@ -47,7 +49,11 @@ export default function Table({ rows }: PropsType) {
                   <Button>
                     <CheckIcon color="success" />
                   </Button>
-                  <Button>
+                  <Button
+                    onClick={() => {
+                      remove(row.id);
+                    }}
+                  >
                     <CloseIcon color="error" />
                   </Button>
                 </ButtonGroup>
