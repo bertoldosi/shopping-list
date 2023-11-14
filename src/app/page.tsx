@@ -1,19 +1,39 @@
+"use client";
+
 import * as React from "react";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
-import AddIcon from "@mui/icons-material/Add";
 import { Box, Button, Stack } from "@mui/material";
 import Table from "./table";
 
+interface RowType {
+  name: string;
+}
+
 export default function HomePage() {
+  const [searchValue, setSeachValue] = React.useState("");
+  const [rows, setRows] = React.useState<RowType[]>([]);
+
+  function onChangeSeach(value: string) {
+    setSeachValue(value);
+  }
+
+  function Add() {
+    setRows((prevRows) => [
+      ...prevRows,
+      {
+        name: searchValue,
+      },
+    ]);
+  }
+
   return (
     <Box
       sx={{
         height: "100vh",
         display: "flex",
         alignContent: "center",
-        justifyContent: "center",
         flexDirection: "column",
         p: ".5rem",
       }}
@@ -32,16 +52,18 @@ export default function HomePage() {
           sx={{ ml: 1, flex: 1 }}
           placeholder="Nome do produto"
           inputProps={{ "aria-label": "search product name" }}
+          onChange={(event) => {
+            onChangeSeach(event.target.value);
+          }}
         />
-        <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+        <Divider orientation="vertical" />
         <Stack direction="row" spacing={2}>
-          <Button variant="contained" size="small" endIcon={<AddIcon />}>
-            Adicionar
+          <Button size="small" onClick={Add} color="success">
+            Salvar
           </Button>
         </Stack>
       </Paper>
-
-      <Table />
+      <Table rows={rows} />
     </Box>
   );
 }

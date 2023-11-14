@@ -1,94 +1,61 @@
 "use client";
 
 import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
+import { default as TableMUI } from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button, Checkbox } from "@mui/material";
+import { Button, ButtonGroup, Checkbox, Divider, styled } from "@mui/material";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
-function createData(name: string, protein: number) {
-  return { name, protein };
+interface RowType {
+  name: string;
 }
 
-const rows = [
-  createData("Frozen yoghurt", 4.0),
-  createData("Ice cream sandwich", 4.3),
-  createData("Eclair", 6.0),
-  createData("Cupcake", 4.3),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-  createData("Gingerbread", 3.9),
-];
+interface PropsType {
+  rows: RowType[];
+}
 
-export default function CustomizedTables() {
+const StyledTableCell = styled(TableCell)(() => ({
+  padding: "0 .2em",
+}));
+
+export default function Table({ rows }: PropsType) {
   return (
     <TableContainer component={Paper}>
-      <Table aria-label="customized table">
+      <TableMUI aria-label="table">
         <TableBody>
           {rows.map((row) => (
-            <StyledTableRow key={row.name}>
+            <TableRow key={row.name}>
               <StyledTableCell padding="checkbox" component="th" scope="row">
                 <Checkbox
-                  color="primary"
+                  id="checkbox"
+                  name="checkbox"
                   checked={false}
                   onChange={() => {}}
                   inputProps={{
-                    "aria-label": "select",
+                    "aria-label": "checkbox",
                   }}
                 />
               </StyledTableCell>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
+              <StyledTableCell>{row.name}</StyledTableCell>
               <StyledTableCell align="right">
-                <DeleteForeverIcon />
+                <ButtonGroup size="small" aria-label="buttons">
+                  <Button>
+                    <CheckIcon color="success" />
+                  </Button>
+                  <Button>
+                    <CloseIcon color="error" />
+                  </Button>
+                </ButtonGroup>
               </StyledTableCell>
-            </StyledTableRow>
+            </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </TableMUI>
     </TableContainer>
   );
 }
