@@ -7,15 +7,11 @@ import Divider from "@mui/material/Divider";
 import { Box, Button, Stack } from "@mui/material";
 import Table from "./table";
 import { v4 as uuidv4 } from "uuid";
-
-interface RowType {
-  id: string;
-  name: string;
-}
+import { ProductType } from "@/models";
 
 export default function HomePage() {
   const [searchValue, setSeachValue] = React.useState("");
-  const [rows, setRows] = React.useState<RowType[]>([]);
+  const [products, setProducts] = React.useState<ProductType[]>([]);
 
   function onChangeSeach(value: string) {
     setSeachValue(value);
@@ -25,12 +21,14 @@ export default function HomePage() {
     event.preventDefault();
 
     if (searchValue) {
-      setRows((prevRows) => [
-        ...prevRows,
+      setProducts((prevProducts) => [
         {
           id: uuidv4(),
           name: searchValue,
+          check: false,
+          edit: false,
         },
+        ...prevProducts,
       ]);
     } else {
       alert("Digite o nome do produto!");
@@ -40,8 +38,10 @@ export default function HomePage() {
   }
 
   function remove(id: string) {
-    const filterItens = rows.filter((product) => product.id !== id);
-    setRows(filterItens);
+    if (window.confirm("Tem certeza que deseja deletar este item?")) {
+      const filterItens = products.filter((product) => product.id !== id);
+      setProducts(filterItens);
+    }
   }
 
   return (
@@ -66,7 +66,7 @@ export default function HomePage() {
       >
         <InputBase
           sx={{ ml: 1, flex: 1 }}
-          placeholder="Nome do produto"
+          placeholder="Ex: 10 kg de arroz"
           inputProps={{ "aria-label": "search product name" }}
           value={searchValue}
           onChange={(event) => {
@@ -87,7 +87,7 @@ export default function HomePage() {
           </Button>
         </Stack>
       </Paper>
-      <Table rows={rows} remove={remove} />
+      <Table products={products} setProducts={setProducts} remove={remove} />
     </Box>
   );
 }
