@@ -12,14 +12,23 @@ import Paper from "@mui/material/Paper";
 import { Button, ButtonGroup, Checkbox, styled } from "@mui/material";
 import { ProductType } from "@/models";
 
-interface PropsType {
+interface TablePropsType {
   products: ProductType[];
   setProducts: React.Dispatch<ProductType[]>;
   remove: (id: string) => void;
 }
 
+interface ButtonsPropsType {
+  product: ProductType;
+  remove: (id: string) => void;
+}
+
 const StyledTableCell = styled(TableCell)(() => ({
   padding: "0 .2em",
+}));
+
+const StyledTableRowDisabled = styled(TableRow)(({ theme }) => ({
+  backgroundColor: theme.palette.action.disabled,
 }));
 
 const styledCommonInputTable = {
@@ -39,11 +48,29 @@ const styledInputTableCheck = {
   textDecoration: "line-through",
 };
 
-const StyledTableRowDisabled = styled(TableRow)(({ theme }) => ({
-  backgroundColor: theme.palette.action.disabled,
-}));
+function Buttons({ product, remove }: ButtonsPropsType) {
+  return (
+    <ButtonGroup size="small" aria-label="buttons">
+      <Button variant="text" disabled={!product.edit}>
+        <CheckIcon color={product.edit ? "success" : "disabled"} />
+      </Button>
+      <Button
+        variant="text"
+        onClick={() => {
+          remove(product.id);
+        }}
+      >
+        <CloseIcon color="error" />
+      </Button>
+    </ButtonGroup>
+  );
+}
 
-export default function Table({ products, setProducts, remove }: PropsType) {
+export default function Table({
+  products,
+  setProducts,
+  remove,
+}: TablePropsType) {
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value, name, id } = event.target;
 
@@ -76,24 +103,6 @@ export default function Table({ products, setProducts, remove }: PropsType) {
       })
     );
   }
-
-  function sortedProducts() {
-    const sorted = [...products].sort((a, b) => {
-      if (a.check && !b.check) {
-        return 1; // Coloca os itens marcados abaixo
-      } else if (!a.check && b.check) {
-        return -1; // Mantém os itens não marcados acima
-      } else {
-        return 0; // Mantém a ordem para itens com o mesmo status de marcação
-      }
-    });
-
-    setProducts(sorted);
-  }
-
-  React.useEffect(() => {
-    sortedProducts;
-  }, [products]);
 
   return (
     <TableContainer component={Paper}>
@@ -131,18 +140,7 @@ export default function Table({ products, setProducts, remove }: PropsType) {
                   />
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  <ButtonGroup size="small" aria-label="buttons">
-                    <Button disabled={!product.edit}>
-                      <CheckIcon color="success" />
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        remove(product.id);
-                      }}
-                    >
-                      <CloseIcon color="error" />
-                    </Button>
-                  </ButtonGroup>
+                  <Buttons product={product} remove={remove} />
                 </StyledTableCell>
               </StyledTableRowDisabled>
             ) : (
@@ -171,18 +169,7 @@ export default function Table({ products, setProducts, remove }: PropsType) {
                   />
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  <ButtonGroup size="small" aria-label="buttons">
-                    <Button disabled={!product.edit}>
-                      <CheckIcon color="success" />
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        remove(product.id);
-                      }}
-                    >
-                      <CloseIcon color="error" />
-                    </Button>
-                  </ButtonGroup>
+                  <Buttons product={product} remove={remove} />
                 </StyledTableCell>
               </TableRow>
             )

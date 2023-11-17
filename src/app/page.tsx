@@ -44,6 +44,18 @@ export default function HomePage() {
     }
   }
 
+  const sortedProducts = React.useMemo(() => {
+    return [...products].sort((a, b) => {
+      if (a.check && !b.check) {
+        return 1; // Coloca os itens marcados abaixo
+      } else if (!a.check && b.check) {
+        return -1; // Mantém os itens não marcados acima
+      } else {
+        return 0; // Mantém a ordem para itens com o mesmo status de marcação
+      }
+    });
+  }, [products]);
+
   return (
     <Box
       sx={{
@@ -87,7 +99,11 @@ export default function HomePage() {
           </Button>
         </Stack>
       </Paper>
-      <Table products={products} setProducts={setProducts} remove={remove} />
+      <Table
+        products={sortedProducts}
+        setProducts={setProducts}
+        remove={remove}
+      />
     </Box>
   );
 }
