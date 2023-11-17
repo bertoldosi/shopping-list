@@ -77,8 +77,8 @@ export default function Table({ products, setProducts, remove }: PropsType) {
     );
   }
 
-  React.useEffect(() => {
-    const sortedList = [...products].sort((a, b) => {
+  function sortedProducts() {
+    const sorted = [...products].sort((a, b) => {
       if (a.check && !b.check) {
         return 1; // Coloca os itens marcados abaixo
       } else if (!a.check && b.check) {
@@ -88,7 +88,11 @@ export default function Table({ products, setProducts, remove }: PropsType) {
       }
     });
 
-    setProducts(sortedList);
+    setProducts(sorted);
+  }
+
+  React.useEffect(() => {
+    sortedProducts;
   }, [products]);
 
   return (
