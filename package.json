@@ -16,6 +16,7 @@
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "next": "latest",
+    "next-auth": "^4.24.5",
     "react": "latest",
     "react-dom": "latest",
     "uuid": "^9.0.1"
