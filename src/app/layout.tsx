@@ -18,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="pt_BR">
       <body
+        suppressHydrationWarning={true}
         style={{
           background: "#444444",
           overflow: "hidden",
